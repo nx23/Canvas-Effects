@@ -17,11 +17,11 @@ const mouse = {
 
 class Particle {
     constructor() {
-        //this.x = mouse.x
-        //this.y = mouse.y
-        this.radius = Math.random() * 15
-        this.x = Math.random() * canvas.width
-        this.y = Math.random() * canvas.height
+        this.x = mouse.x
+        this.y = mouse.y
+        this.radius = Math.random() * 20
+        //this.x = Math.random() * canvas.width
+        //this.y = Math.random() * canvas.height
         this.speedX = Math.random() * 3 - 1.5
         this.speedY = Math.random() * 3 - 1.5
         this.color = `hsl(${hue}, 100%, 50%)`
@@ -31,7 +31,7 @@ class Particle {
         this.x += this.speedX
         this.y += this.speedY
         if(this.radius > 0.2){
-            this.radius -= 0.05
+            this.radius -= 0.1
         }
     }
 
@@ -51,12 +51,13 @@ addEventListener('resize', () => {
 addEventListener('mousemove', (event) => {
     mouse.x = event.x
     mouse.y = event.y
+    init()
 })
 
 function init(){
-    for (let index = 0; index < 5; index ++) {
+    for (let index = 0; index < 25; index ++) {
         particlesArray.push(new Particle())
-        hue += 0.1
+        hue += 0.05
     }
 }
 
@@ -64,22 +65,6 @@ function handleParticle(){
     particlesArray.forEach((particle, particleIndex) => {
         particle.update()
         particle.draw()
-        for (let index = 0; index < particlesArray.length; index++) {
-            // distance on x axis
-            const dx = particle.x - particlesArray[index].x
-            // distance on Y axis
-            const dy = particle.y - particlesArray[index].y
-            // hipotenusa
-            const distance = Math.sqrt(dx * dx + dy * dy)
-            if (distance < 100) {
-                c.beginPath()
-                c.strokeStyle = particle.color
-                c.lineWidth = 0.2
-                c.moveTo(particle.x, particle.y)
-                c.lineTo(particlesArray[index].x, particlesArray[index].y)
-                c.stroke()
-            }
-        }
         if(particle.radius <= 0.2){
             setTimeout(() => {
                 particlesArray.splice(particleIndex, 1)
@@ -90,12 +75,10 @@ function handleParticle(){
 
 function animate() {
     var animationId = requestAnimationFrame(animate)
-    //c.clearRect(0, 0, canvas.width, canvas.height)
-    init()
-
+    c.clearRect(0, 0, canvas.width, canvas.height)
     // create fading effect
-    c.fillStyle = 'rgba(0, 0, 0, 0.05)'
-    c.fillRect(0, 0, canvas.width, canvas.height)
+    //c.fillStyle = 'rgba(0, 0, 0, 0.05)'
+    //c.fillRect(0, 0, canvas.width, canvas.height)
     handleParticle()
 }
 
